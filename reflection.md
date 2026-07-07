@@ -10,7 +10,14 @@ I planned a simple design centered on a pet owner, their pets, the care tasks th
 
 - What classes did you include, and what responsibilities did you assign to each?
 
-The system would support three core actions for users:
+The system uses four main classes to support the app's core workflow:
+
+1. Owner: represents the pet parent, stores basic profile information, and manages the list of pets they care for.
+2. Pet: represents an individual animal, stores basic details such as name and species, and holds the tasks associated with that pet.
+3. CareTask: represents a single care activity such as a walk, feeding, or medication, including duration, priority, and completion status.
+4. Scheduler: evaluates the tasks and produces a daily plan based on the owner's constraints and the tasks' priorities.
+
+These classes support three core actions for users:
 
 1. Add or update pet information so the app knows which pet needs care.
 2. Create and edit care tasks such as walks, feeding, or medication, including details like duration and priority.
@@ -20,6 +27,8 @@ The system would support three core actions for users:
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
+
+Yes. I refined the initial design by making the relationship between Owner and Pet more explicit in the skeleton, with the Owner class managing a list of pets and the Pet class holding its own tasks. I also added a dedicated Scheduler class to separate planning logic from the data objects so the app would be easier to extend later.
 
 ---
 
