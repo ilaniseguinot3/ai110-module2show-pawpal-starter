@@ -5,7 +5,16 @@
 **a. Initial design**
 
 - Briefly describe your initial UML design.
+
+I planned a simple design centered on a pet owner, their pets, the care tasks they need, and a scheduler that turns those tasks into a daily plan. The main goal was to support a few core user actions clearly and consistently.
+
 - What classes did you include, and what responsibilities did you assign to each?
+
+The system would support three core actions for users:
+
+1. Add or update pet information so the app knows which pet needs care.
+2. Create and edit care tasks such as walks, feeding, or medication, including details like duration and priority.
+3. View a generated daily plan that shows today's scheduled tasks and explains why they were chosen.
 
 **b. Design changes**
 
