@@ -100,12 +100,27 @@ Confidence level: ★★★★★
 
 ## 📸 Demo Walkthrough
 
-Describe your app in numbered steps so a reader can follow along without watching a video:
+1. Open the Streamlit app and enter an owner name, pet name, species, and a task such as a walk or medication.
+2. Click the add button to create the pet and attach the task to it through the backend owner/pet classes.
+3. Generate the schedule to see the scheduler build a daily plan, sort pending tasks by time, and explain the plan.
+4. If two tasks overlap, the scheduler surfaces a warning so the owner can adjust the plan before relying on it.
+5. The CLI demo script also shows the same behavior in the terminal, including the sorted schedule and recurring-task logic.
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+Example CLI output from running the demo script:
 
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
+```text
+Today's Schedule
+================
+08:00 | Morning walk | high | 30 min
+08:30 | Play session | high | 20 min
+08:50 | Medicine | high | 10 min
+09:00 | Feed breakfast | medium | 15 min
+
+Plan Summary
+------------
+Today's plan includes 4 task(s):
+- 08:00: Morning walk (30 min, high)
+- 08:30: Play session (20 min, high)
+- 08:50: Medicine (10 min, high)
+- 09:00: Feed breakfast (15 min, medium)
+```

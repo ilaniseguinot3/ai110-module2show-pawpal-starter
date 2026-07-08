@@ -1,0 +1,52 @@
+classDiagram
+    class Task {
+        +description: str
+        +duration_minutes: int
+        +priority: str
+        +scheduled_time: Optional[str]
+        +frequency: str
+        +completed: bool
+        +next_due_date: Optional[date]
+        +mark_complete()
+        +mark_incomplete()
+        +to_dict()
+    }
+
+    class Pet {
+        +name: str
+        +species: str
+        +age: int
+        +owner: Optional[Owner]
+        +tasks: List[Task]
+        +add_task(task)
+        +get_pending_tasks()
+        +get_completed_tasks()
+    }
+
+    class Owner {
+        +name: str
+        +email: str
+        +pets: List[Pet]
+        +available_start: str
+        +available_end: str
+        +add_pet(pet)
+        +get_pet(pet_name)
+        +add_task_to_pet(pet_name, task)
+        +get_all_tasks()
+        +get_pending_tasks()
+    }
+
+    class Scheduler {
+        +collect_tasks(owner)
+        +sort_tasks(tasks)
+        +sort_by_time(tasks)
+        +filter_tasks(tasks, pet_name, completed)
+        +build_daily_plan(owner)
+        +explain_plan(plan)
+        +detect_conflicts(tasks)
+    }
+
+    Owner "1" --> "0..*" Pet : owns
+    Pet "1" --> "0..*" Task : contains
+    Scheduler ..> Owner : reads owner data
+    Scheduler ..> Task : evaluates and orders

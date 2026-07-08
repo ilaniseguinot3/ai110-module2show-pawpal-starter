@@ -39,6 +39,8 @@ Yes. I refined the initial design by making the relationship between Owner and P
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
 
+The scheduler mainly considers task priority, time order, and basic availability windows. It sorts tasks by urgency and scheduled time, filters tasks for the active day, and warns about conflicts when tasks overlap. I prioritized these constraints because they are the most visible to a pet owner and directly support the app's core goal of creating a practical daily plan without requiring a complicated optimization engine.
+
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
@@ -55,10 +57,14 @@ The scheduler currently warns about conflicts when two tasks share the same star
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
 - What kinds of prompts or questions were most helpful?
 
+I used the AI assistant throughout the project for design brainstorming, code scaffolding, testing, and refactoring. It was especially helpful when I needed quick drafts of class structures, method signatures, and test cases. Prompts that asked for concrete implementation steps, such as "write a scheduler class for recurring tasks and conflict warnings" or "help me connect the backend logic to Streamlit," were more useful than broad brainstorming prompts.
+
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
 - How did you evaluate or verify what the AI suggested?
+
+One example was when the AI suggested a more elaborate scheduling approach with many conditional branches. I rejected that version because it made the backend harder to read and test. Instead, I kept the scheduler focused on a small set of clear rules: sort by priority and time, filter for active tasks, and warn on overlap. I verified the behavior by running the pytest suite and by checking the CLI output from the demo script to ensure the schedule matched the intended logic.
 
 ---
 
@@ -69,10 +75,14 @@ The scheduler currently warns about conflicts when two tasks share the same star
 - What behaviors did you test?
 - Why were these tests important?
 
+I tested task completion, adding tasks to pets, recurring-task behavior, conflict detection, and the scheduler's ability to sort tasks by time. These tests were important because they cover the core user actions that make the app useful: creating tasks, seeing them in a logical order, and receiving useful warnings when the schedule becomes overloaded.
+
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
 - What edge cases would you test next if you had more time?
+
+I am fairly confident that the current scheduler works well for its intended scope because the tests pass and the demo output is readable and consistent. If I had more time, I would test edge cases such as tasks with very long durations, multiple overlapping conflicts, recurring tasks that span weekends or holidays, and more complex owner availability windows.
 
 ---
 
@@ -82,10 +92,16 @@ The scheduler currently warns about conflicts when two tasks share the same star
 
 - What part of this project are you most satisfied with?
 
+I am most satisfied with how the system stayed modular. The backend logic, tests, and Streamlit UI all work together without being tightly coupled, which makes the project easier to understand and extend.
+
 **b. What you would improve**
 
 - If you had another iteration, what would you improve or redesign?
 
+In a future iteration, I would expand the scheduler to support more realistic constraints such as user-defined time windows, task dependencies, and richer recurring patterns beyond simple daily recurrence.
+
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+
+A strong system design is still essential even when AI can generate code quickly. The lead architect needs to guide the structure, define clear responsibilities, and verify that the implementation matches the intended behavior rather than simply accepting the most convenient suggestion.

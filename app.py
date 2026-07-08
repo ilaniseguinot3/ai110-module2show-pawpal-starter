@@ -91,10 +91,43 @@ st.caption("Generate a daily plan from the tasks stored in session state.")
 if st.button("Generate schedule"):
     scheduler = Scheduler()
     plan = scheduler.build_daily_plan(st.session_state.owner)
+    all_tasks = st.session_state.owner.get_all_tasks()
+    pending_tasks = (
+        scheduler.filter_tasks(all_tasks, completed=False)
+        if hasattr(scheduler, "filter_tasks")
+        else [task for task in all_tasks if not task.completed]
+    )
+    sorted_tasks = (
+        scheduler.sort_by_time(pending_tasks)
+        if hasattr(scheduler, "sort_by_time")
+        else sorted(pending_tasks, key=lambda task: task.scheduled_time or "23:59")
+    )
+    conflicts = (
+        scheduler.detect_conflicts(plan)
+        if hasattr(scheduler, "detect_conflicts")
+        else []
+    )
+
     if plan:
         st.success("Schedule created!")
+        st.write("### Sorted pending tasks")
+        st.table(
+            [
+                {
+                    "Task": task.description,
+                    "Priority": task.priority,
+                    "Duration": f"{task.duration_minutes} min",
+                    "Time": task.scheduled_time or "unscheduled",
+                }
+                for task in sorted_tasks
+            ]
+        )
         st.write(scheduler.explain_plan(plan))
-        for task in plan:
-            st.write(f"- {task.scheduled_time}: {task.description} ({task.duration_minutes} min, {task.priority})")
+        if conflicts:
+            st.warning("Potential conflicts detected:")
+            for warning in conflicts:
+                st.warning(warning)
+        else:
+            st.success("No conflicts detected.")
     else:
         st.info("No tasks available yet.")
