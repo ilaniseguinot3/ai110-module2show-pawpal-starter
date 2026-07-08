@@ -44,6 +44,8 @@ Yes. I refined the initial design by making the relationship between Owner and P
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+The scheduler currently warns about conflicts when two tasks share the same start time, rather than modeling every possible overlap across full durations. This keeps the logic simple, readable, and fast for a small pet-care app, while still catching the most obvious scheduling mistakes without overcomplicating the implementation.
+
 ---
 
 ## 3. AI Collaboration

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import date, timedelta
 from typing import List, Optional
 
 
@@ -15,10 +16,15 @@ class Task:
     scheduled_time: Optional[str] = None
     frequency: str = "once"
     completed: bool = False
+    next_due_date: Optional[date] = None
 
     def mark_complete(self) -> None:
-        """Mark the task as completed."""
+        """Mark the task as completed and create the next recurrence if needed."""
         self.completed = True
+        if self.frequency == "daily":
+            self.next_due_date = date.today() + timedelta(days=1)
+        elif self.frequency == "weekly":
+            self.next_due_date = date.today() + timedelta(weeks=1)
 
     def mark_incomplete(self) -> None:
         """Reset the task to an incomplete state."""
@@ -117,6 +123,19 @@ class Scheduler:
             ),
         )
 
+    def sort_by_time(self, tasks: List[Task]) -> List[Task]:
+        """Sort tasks by their scheduled time in HH:MM format."""
+        return sorted(tasks, key=lambda task: self._to_minutes(task.scheduled_time or "23:59"))
+
+    def filter_tasks(self, tasks: List[Task], *, pet_name: Optional[str] = None, completed: Optional[bool] = None) -> List[Task]:
+        """Filter tasks by pet name or completion status."""
+        filtered = list(tasks)
+        if pet_name is not None:
+            filtered = [task for task in filtered if pet_name.lower() in task.description.lower()]
+        if completed is not None:
+            filtered = [task for task in filtered if task.completed is completed]
+        return filtered
+
     def build_daily_plan(self, owner: Owner) -> List[Task]:
         """Create a simple daily plan that fits within the owner's availability."""
         tasks = self.sort_tasks(self.collect_tasks(owner))
@@ -144,6 +163,25 @@ class Scheduler:
             time_label = task.scheduled_time or "unscheduled"
             lines.append(f"- {time_label}: {task.description} ({task.duration_minutes} min, {task.priority})")
         return "\n".join(lines)
+
+    def detect_conflicts(self, tasks: List[Task]) -> List[str]:
+        """Return simple warnings for tasks that overlap in time."""
+        warnings: List[str] = []
+        for index, task in enumerate(tasks):
+            if not task.scheduled_time:
+                continue
+            start = self._to_minutes(task.scheduled_time)
+            end = start + task.duration_minutes
+            for other in tasks[index + 1 :]:
+                if not other.scheduled_time:
+                    continue
+                other_start = self._to_minutes(other.scheduled_time)
+                other_end = other_start + other.duration_minutes
+                if start < other_end and other_start < end:
+                    warnings.append(
+                        f"Conflict: {task.description} overlaps with {other.description} at {task.scheduled_time}."
+                    )
+        return warnings
 
     def _to_minutes(self, value: str) -> int:
         hours_str, minutes_str = value.split(":")
