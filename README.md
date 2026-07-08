@@ -65,19 +65,29 @@ Today's plan includes 4 task(s):
 
 ## 🧪 Testing PawPal+
 
+Run the test suite with:
+
 ```bash
-# Run the full test suite:
-pytest
-
-# Run with coverage:
-pytest --cov
+python -m pytest
 ```
 
-Sample test output:
+The tests cover core scheduling behaviors such as task completion, adding tasks to pets, recurring-task scheduling, conflict detection, and chronological sorting.
 
+Example test output:
+
+```text
+============================= test session starts ==============================
+platform win32 -- Python 3.13.3, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\imspi\codepath\ai110-module2show-pawpal-starter
+collected 7 items
+
+test_pawpal_system.py ..                                                 [ 28%]
+tests\test_pawpal.py .....                                               [100%]
+
+============================== 7 passed in 0.05s ==============================
 ```
-# Paste your pytest output here
-```
+
+Confidence level: ★★★★★
 
 ## 📐 Smarter Scheduling
 

@@ -40,3 +40,15 @@ def test_scheduler_detects_conflicting_task_times():
 
     assert len(warnings) == 1
     assert "Conflict" in warnings[0]
+
+
+def test_scheduler_sorts_tasks_by_time():
+    scheduler = Scheduler()
+    first_task = Task(description="Lunch break", duration_minutes=15, priority="medium")
+    second_task = Task(description="Morning walk", duration_minutes=30, priority="high")
+    first_task.scheduled_time = "10:00"
+    second_task.scheduled_time = "08:00"
+
+    sorted_tasks = scheduler.sort_by_time([first_task, second_task])
+
+    assert [task.description for task in sorted_tasks] == ["Morning walk", "Lunch break"]
